@@ -7,7 +7,7 @@ const io = new Server(server, {
   cors: true,
 });
 
-const PORT = process.env.PORT || 8000;
+const PORT =  8000;
 
 const emailToSocketIdMap = new Map();
 const socketidToEmailMap = new Map();
@@ -41,6 +41,13 @@ io.on('connection', (socket) => {
     io.to(to).emit('peer:nego:final', { from: socket.id, ans });
   });
 });
+const indexPath = path.resolve(__dirname, 'src', 'index.js');
+fs.access(indexPath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error('Error: index.js file not found.');
+      process.exit(1); 
+    }
+  });
 
 app.get('/', (req, res) => {
   res.send('Hello, Express!');
